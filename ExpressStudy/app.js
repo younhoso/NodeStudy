@@ -21,16 +21,18 @@ app.get('/api/members/:id', async (req, res) => {
   const { id } = req.params;
   const member = await Member.findOne({where: { id }});
   if(member){
+    console.log(member.toJSON())
     res.send(member);
   } else {
     res.status(404).send({message: 'There is no such member whith the id!!'});
   }
 });
 
-app.post('/api/members', (req, res) => {
+app.post('/api/members', async (req, res) => {
   const newMember = req.body;
-  members.push(newMember);
-  res.send(newMember);
+  const member = Member.build(newMember);
+  await member.save();
+  res.send(member);
 });
 
 app.put('/api/members/:id', (req, res) => {
