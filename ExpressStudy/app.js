@@ -5,7 +5,13 @@ const app = express();
 let members = require('./members');
 
 app.get('/api/members', (req, res) => {
-  res.send(members);
+  const { name, team } = req.query;
+  if(team){
+    const teamMembers = members.filter((m) => m.team === team && m.name === name);
+    res.send(teamMembers)
+  } else {
+    res.send(members);
+  }
 });
 
 app.get('/api/members/:id', (req, res) => {
